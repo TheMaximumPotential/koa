@@ -1,0 +1,11 @@
+{
+  "name": "koa",
+  "version": "1.0.0",
+  "description": "实战演练：电影搜索列表",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jinxing",
+  "license": "ISC"
+}
