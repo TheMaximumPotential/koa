@@ -1,0 +1,16 @@
+{
+  "name": "koa-bodyparser",
+  "version": "1.0.0",
+  "description": "实现用户注册功能并进行数据解析",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jinxing",
+  "license": "ISC",
+  "dependencies": {
+    "koa": "^2.10.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0"
+  }
+}
