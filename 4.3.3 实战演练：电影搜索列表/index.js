@@ -1,7 +1,7 @@
 const Koa = require('koa')
 const Router = require('koa-router')
-const queryString = require('querystring')
-const bodyParser = require('koa-bodyparser')
+// const queryString = require('querystring')
+// const bodyParser = require('koa-bodyparser')
 const axios = require('axios')
 
 const app = new Koa()
