@@ -53,39 +53,38 @@ async function getCourseList() {
 }
 
 async function addCourse(course) {
-    // for (let key in course) {
-    //     parseInt(course[key]) && (course[key] = parseInt(course[key]))
-    // }
-    console.log(course)
-
-    // const name = 'c++'
-    // const startTime = 8
-    // const endTime = 10
-    // const weekday = 1
-    // const item = await getCourseByTime(startTime, endTime, weekday)
-    // if (item) {
-    //     throw new Error('当前时间已经安排了课程')
-    // }
-    return await Course.create({
+    course = {
         name: course.name,
         startTime: { hour: course.startTimeHour, minute: course.startTimeMinute },
         endTime: { hour: course.endTimeHour, minute: course.endTimeMinute },
         weekday: course.weekday
-    })
+    }
+    const item = await getCourseByTime(course.startTime, course.endTime, course.weekday)
+    if (item.length) {
+        throw new Error('当前时间已经安排了课程')
+    }
+    return await Course.create(course)
 }
 
-// async function getCourseById(id) {
-//     return await Course.findById(id)
-// }
-//
+async function getCourseById(id) {
+    return await Course.findById(id)
+}
 
-// async function getCourseByTime(start, end, weekday) {
-//     return await Course.find({
-//         weekday: weekday
-//     })
-//         .where('startTime.time').gte(start.hour * 100 + start.minute)
-//         .where('endTime.time').lte(end.hour * 100 + end.minute)
-// }
+async function getCourseByTime(start, end, weekday) {
+    return await Course.find({
+        weekday: parseInt(weekday)
+    })
+        .where('startTime.time').gte(start.hour * 100 + start.minute)
+        .where('endTime.time').lte(end.hour * 100 + end.minute)
+}
+
+async function updateCourse(id, course) {
+    return await Course.updateOne({ _id: id }, course)
+}
+
+async function removeCourse(id) {
+    return await Course.remove({ _id: id })
+}
 
 const JSON_MIME = 'application/json'
 
@@ -124,8 +123,39 @@ router.get('/course', async context => {
     }
 })
 
+router.get('/course/:id', async context => {
+    context.type = JSON_MIME
+    context.body = {
+        status: 0,
+        data: await getCourseById(context.params.id)
+    }
+})
+
 router.post('/course', async context => {
-    await addCourse(context.request.body)
+    context.type = JSON_MIME
+    try {
+        await addCourse(context.request.body)
+        context.body = {
+            status: 0
+        }
+    } catch (e) {
+        context.body = {
+            status: -1,
+            message: e.message
+        }
+    }
+})
+
+router.put('/course/:id', async context => {
+    await updateCourse(context.params.id, context.request.body)
+    context.type = JSON_MIME
+    context.body = {
+        status: 0
+    }
+})
+
+router.delete('/course/:id', async context => {
+    await removeCourse(context.params.id)
     context.type = JSON_MIME
     context.body = {
         status: 0
